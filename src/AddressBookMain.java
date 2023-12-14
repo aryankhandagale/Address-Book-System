@@ -62,7 +62,7 @@ public class AddressBookMain {
         System.out.println("Enter your option: ");
         System.out.println("1. Add Contact");
         System.out.println("2. Edit Existing Contact");
-
+        System.out.println("3. Delete Existing Contact");
     }
 
     private static Contact takeUserInput(Scanner scanner){
@@ -89,6 +89,24 @@ public class AddressBookMain {
             }
         }
         return null; // Contact not found
+    }
+
+    public void deleteContact(String firstName) {
+        Contact contactToDelete = null;
+
+        for (Contact contact : contacts) {
+            if (contact.getFirstName().equalsIgnoreCase(firstName)) {
+                contactToDelete = contact;
+                break;
+            }
+        }
+
+        if (contactToDelete != null) {
+            contacts.remove(contactToDelete);
+            System.out.println("Contact deleted successfully.");
+        } else {
+            System.out.println("Contact not found with the given first name.");
+        }
     }
 
     public void printContacts() {
@@ -129,6 +147,12 @@ public class AddressBookMain {
                     } else {
                         System.out.println("Contact not found with the given first name.");
                     }
+                    break;
+                case 3:
+                    System.out.println("Enter the first name to delete the contact: ");
+                    String deleteFirstName = scanner.nextLine();
+                    addressBook.deleteContact(deleteFirstName);
+                    addressBook.printContacts();
                     break;
                 default:
                     System.out.println("Invalid option. Please choose a valid option.");
