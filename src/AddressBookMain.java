@@ -65,6 +65,21 @@ public class AddressBookMain {
         System.out.println("3. Delete Existing Contact");
     }
 
+    private static ArrayList<Contact> takeMultipleUserInput(Scanner scanner) {
+        ArrayList<Contact> newContacts = new ArrayList<>();
+
+        System.out.println("Enter the number of contacts you want to add: ");
+        int numContacts = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        for (int i = 0; i < numContacts; i++) {
+            System.out.println("Enter details for Contact " + (i + 1) + ":");
+            newContacts.add(takeUserInput(scanner));
+        }
+
+        return newContacts;
+    }
+
     private static Contact takeUserInput(Scanner scanner){
         System.out.println("Enter the first name of the contact: "); String firstName = scanner.nextLine();
         System.out.println("Enter the last name of the contact: "); String lastName = scanner.nextLine();
@@ -78,8 +93,8 @@ public class AddressBookMain {
         return new Contact(firstName, lastName, address, city, state, zipcode, phone, email);
     }
 
-    public void addContact(Contact contact) {
-        contacts.add(contact);
+    public void addContacts(ArrayList<Contact> newContacts) {
+        contacts.addAll(newContacts);
     }
 
     public Contact findContact(String firstName) {
@@ -88,7 +103,7 @@ public class AddressBookMain {
                 return contact;
             }
         }
-        return null; // Contact not found
+        return null;
     }
 
     public void deleteContact(String firstName) {
@@ -124,12 +139,12 @@ public class AddressBookMain {
         while (true) {
             printMainMenu();
             option = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consume newline
 
             switch (option) {
                 case 1:
-                    Contact contact = takeUserInput(scanner);
-                    addressBook.addContact(contact);
+                    ArrayList<Contact> newContacts = takeMultipleUserInput(scanner);
+                    addressBook.addContacts(newContacts);
                     addressBook.printContacts();
                     break;
                 case 2:
@@ -164,5 +179,6 @@ public class AddressBookMain {
                 break;
             }
         }
+        scanner.close();
     }
 }
