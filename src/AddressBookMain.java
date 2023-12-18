@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 class Contact {
@@ -52,17 +54,33 @@ class Contact {
 
 public class AddressBookMain {
 
-    private ArrayList<Contact> contacts;
+    private Map<String, ArrayList<Contact>> addressBooks;
 
     public AddressBookMain() {
-        contacts = new ArrayList<>();
+        addressBooks = new HashMap<>();
     }
 
     private static void printMainMenu() {
         System.out.println("Enter your option: ");
-        System.out.println("1. Add Contact");
-        System.out.println("2. Edit Existing Contact");
-        System.out.println("3. Delete Existing Contact");
+        System.out.println("1. Create New Address Book");
+        System.out.println("2. Switch Address Book");
+        System.out.println("3. Add Contact");
+        System.out.println("4. Edit Existing Contact");
+        System.out.println("5. Delete Existing Contact");
+        System.out.println("6. Print Contacts");
+    }
+
+    public void createAddressBook(String bookName) {
+        addressBooks.put(bookName, new ArrayList<>());
+    }
+
+    public void switchAddressBook(String bookName) {
+        if (addressBooks.containsKey(bookName)) {
+            // Perform operations on the selected address book
+            System.out.println("Switched to Address Book: " + bookName);
+        } else {
+            System.out.println("Address Book not found!");
+        }
     }
 
     private static ArrayList<Contact> takeMultipleUserInput(Scanner scanner) {
@@ -80,94 +98,135 @@ public class AddressBookMain {
         return newContacts;
     }
 
-    private static Contact takeUserInput(Scanner scanner){
-        System.out.println("Enter the first name of the contact: "); String firstName = scanner.nextLine();
-        System.out.println("Enter the last name of the contact: "); String lastName = scanner.nextLine();
-        System.out.println("Enter the address of the contact: "); String address = scanner.nextLine();
-        System.out.println("Enter the city of the contact: "); String city = scanner.nextLine();
-        System.out.println("Enter the state of the contact: "); String state = scanner.nextLine();
-        System.out.println("Enter the zipcode of the contact: "); String zipcode = scanner.nextLine();
-        System.out.println("Enter the phone number of the contact: "); String phone = scanner.nextLine();
-        System.out.println("Enter the email of the contact: "); String email = scanner.nextLine();
+    private static Contact takeUserInput(Scanner scanner) {
+        System.out.println("Enter the first name of the contact: ");
+        String firstName = scanner.nextLine();
+        System.out.println("Enter the last name of the contact: ");
+        String lastName = scanner.nextLine();
+        System.out.println("Enter the address of the contact: ");
+        String address = scanner.nextLine();
+        System.out.println("Enter the city of the contact: ");
+        String city = scanner.nextLine();
+        System.out.println("Enter the state of the contact: ");
+        String state = scanner.nextLine();
+        System.out.println("Enter the zipcode of the contact: ");
+        String zipcode = scanner.nextLine();
+        System.out.println("Enter the phone number of the contact: ");
+        String phone = scanner.nextLine();
+        System.out.println("Enter the email of the contact: ");
+        String email = scanner.nextLine();
 
         return new Contact(firstName, lastName, address, city, state, zipcode, phone, email);
     }
 
-    public void addContacts(ArrayList<Contact> newContacts) {
-        contacts.addAll(newContacts);
-    }
-
-    public Contact findContact(String firstName) {
-        for (Contact contact : contacts) {
-            if (contact.getFirstName().equalsIgnoreCase(firstName)) {
-                return contact;
-            }
-        }
-        return null;
-    }
-
-    public void deleteContact(String firstName) {
-        Contact contactToDelete = null;
-
-        for (Contact contact : contacts) {
-            if (contact.getFirstName().equalsIgnoreCase(firstName)) {
-                contactToDelete = contact;
-                break;
-            }
-        }
-
-        if (contactToDelete != null) {
-            contacts.remove(contactToDelete);
-            System.out.println("Contact deleted successfully.");
+    public void addContacts(String bookName, ArrayList<Contact> newContacts) {
+        if (addressBooks.containsKey(bookName)) {
+            addressBooks.get(bookName).addAll(newContacts);
         } else {
-            System.out.println("Contact not found with the given first name.");
+            System.out.println("Address Book not found! Create address book first.");
         }
     }
 
-    public void printContacts() {
-        for (Contact contact : contacts) {
-            System.out.println(contact.getFirstName() + " " + contact.getLastName() + ", " + contact.getAddress() + ", " + contact.getCity()
-                    + ", " + contact.getState() + ", " + contact.getZipcode() + ", " + contact.getPhone() + ", " + contact.getEmail());
+    public Contact findContact(String bookName, String firstName) {
+        if (addressBooks.containsKey(bookName)) {
+            for (Contact contact : addressBooks.get(bookName)) {
+                if (contact.getFirstName().equalsIgnoreCase(firstName)) {
+                    return contact;
+                }
+            }
+        } else {
+            System.out.println("Address Book not found! Please create the address book first.");
+        }
+        return null; // Contact not found
+    }
+
+    public void deleteContact(String bookName, String firstName) {
+        if (addressBooks.containsKey(bookName)) {
+            Contact contactToDelete = null;
+
+            for (Contact contact : addressBooks.get(bookName)) {
+                if (contact.getFirstName().equalsIgnoreCase(firstName)) {
+                    contactToDelete = contact;
+                    break;
+                }
+            }
+
+            if (contactToDelete != null) {
+                addressBooks.get(bookName).remove(contactToDelete);
+                System.out.println("Contact deleted successfully from Address Book: " + bookName);
+            } else {
+                System.out.println("Contact not found with the given first name in Address Book: " + bookName);
+            }
+        } else {
+            System.out.println("Address Book not found! Please create the address book first.");
+        }
+    }
+
+    public void printContacts(String bookName) {
+        if (addressBooks.containsKey(bookName)) {
+            System.out.println("Contacts in Address Book: " + bookName);
+            for (Contact contact : addressBooks.get(bookName)) {
+                System.out.println(contact.getFirstName() + " " + contact.getLastName() + ", " +
+                        contact.getAddress() + ", " + contact.getCity() + ", " + contact.getState() +
+                        ", " + contact.getZipcode() + ", " + contact.getPhone() + ", " + contact.getEmail());
+            }
+        } else {
+            System.out.println("Address Book not found! Please create the address book first.");
         }
     }
 
     public static void main(String[] args) {
-        AddressBookMain addressBook = new AddressBookMain();
+        AddressBookMain addressBookManager = new AddressBookMain();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome To Address Book Program");
         int option;
+        String currentAddressBook = null;
+
         while (true) {
             printMainMenu();
             option = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (option) {
                 case 1:
-                    ArrayList<Contact> newContacts = takeMultipleUserInput(scanner);
-                    addressBook.addContacts(newContacts);
-                    addressBook.printContacts();
+                    System.out.println("Enter the name of the new address book: ");
+                    String newBookName = scanner.nextLine();
+                    addressBookManager.createAddressBook(newBookName);
                     break;
                 case 2:
-                    System.out.println("Enter the first name to find the contact: ");
-                    String editFirstName = scanner.nextLine();
-                    Contact contactToEdit = addressBook.findContact(editFirstName);
-
-                    if (contactToEdit != null) {
-                        System.out.println("Enter new information for the contact:");
-                        Contact editedContact = takeUserInput(scanner);
-                        addressBook.contacts.remove(contactToEdit);
-                        addressBook.contacts.add(editedContact);
-                        System.out.println("Contact edited successfully.");
-                        addressBook.printContacts();
-                    } else {
-                        System.out.println("Contact not found with the given first name.");
-                    }
+                    System.out.println("Enter the name of the address book to switch: ");
+                    String switchBookName = scanner.nextLine();
+                    addressBookManager.switchAddressBook(switchBookName);
+                    currentAddressBook = switchBookName;
                     break;
                 case 3:
+                    ArrayList<Contact> newContacts = takeMultipleUserInput(scanner);
+                    addressBookManager.addContacts(currentAddressBook, newContacts);
+                    addressBookManager.printContacts(currentAddressBook);
+                    break;
+                case 4:
+                    System.out.println("Enter the first name to find the contact: ");
+                    String findFirstName = scanner.nextLine();
+                    Contact foundContact = addressBookManager.findContact(currentAddressBook, findFirstName);
+
+                    if (foundContact != null) {
+                        System.out.println("Contact found in Address Book: " + currentAddressBook);
+                        System.out.println(foundContact.getFirstName() + " " + foundContact.getLastName() + ", " +
+                                foundContact.getAddress() + ", " + foundContact.getCity() + ", " +
+                                foundContact.getState() + ", " + foundContact.getZipcode() + ", " +
+                                foundContact.getPhone() + ", " + foundContact.getEmail());
+                    } else {
+                        System.out.println("Contact not found with the given first name in Address Book: " + currentAddressBook);
+                    }
+                    break;
+                case 5:
                     System.out.println("Enter the first name to delete the contact: ");
                     String deleteFirstName = scanner.nextLine();
-                    addressBook.deleteContact(deleteFirstName);
-                    addressBook.printContacts();
+                    addressBookManager.deleteContact(currentAddressBook, deleteFirstName);
+                    addressBookManager.printContacts(currentAddressBook);
+                    break;
+                case 6:
+                    addressBookManager.printContacts(currentAddressBook);
                     break;
                 default:
                     System.out.println("Invalid option. Please choose a valid option.");
