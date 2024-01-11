@@ -1,7 +1,7 @@
 package com.bridgelabz;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 
 // This class contains main()
@@ -12,6 +12,7 @@ public class Main {
         @Parameters: String[] args.
         @Return: void.
     */
+
 
     public static void main(String[] args) {
         AddressBook addressBookManager = new AddressBook();
@@ -56,6 +57,32 @@ public class Main {
                     break;
                 case 6:
                     addressBookManager.printContacts(currentAddressBook);
+                    break;
+                case 7:
+                    System.out.println("Enter city to find contacts: ");
+                    String cityToFind = scanner.nextLine();
+                    List<Contact> contactsInCity = addressBookManager.findByCity(currentAddressBook, cityToFind);
+                    if (!contactsInCity.isEmpty()) {
+                        System.out.println("Contacts found in the city:");
+                        for (Contact contact : contactsInCity) {
+                            System.out.println(contact.getFirstName() + " " + contact.getLastName());
+                        }
+                    } else {
+                        System.out.println("No contacts found in the specified city.");
+                    }
+                    break;
+                case 8:
+                    System.out.println("Enter state to find contacts: ");
+                    String stateToFind = scanner.nextLine();
+                    List<Contact> contactsInState = addressBookManager.findByState(currentAddressBook, stateToFind);
+                    if (!contactsInState.isEmpty()) {
+                        System.out.println("Contacts found in the city:");
+                        for (Contact contact : contactsInState) {
+                            System.out.println(contact.getFirstName() + " " + contact.getLastName());
+                        }
+                    } else {
+                        System.out.println("No contacts found in the specified state.");
+                    }
                     break;
                 default:
                     System.out.println("Invalid option. Please choose a valid option.");

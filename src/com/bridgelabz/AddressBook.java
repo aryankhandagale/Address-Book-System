@@ -1,6 +1,7 @@
 package com.bridgelabz;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /*  This class contains printMainMenu(), createAddressBook(), switchAddressBook(), takeMultipleUserInput(),
     takeUserInput(), addContacts(), editContact(), findContact(), deleteContact(), printContacts().
@@ -27,6 +28,8 @@ public class AddressBook {
         System.out.println("4. Edit Existing Contact");
         System.out.println("5. Delete Existing Contact");
         System.out.println("6. Print Contacts");
+        System.out.println("7. Find Contact by City");
+        System.out.println("8. Find Contact by State");
     }
 
     public void createAddressBook(String bookName) {
@@ -82,14 +85,13 @@ public class AddressBook {
         if (addressBooks.containsKey(bookName)) {
             ArrayList<Contact> existingContacts = addressBooks.get(bookName);
 
-            for (Contact newContact : newContacts) {
-                if (!existingContacts.contains(newContact)) {
-                    existingContacts.add(newContact);
-                    System.out.println("Contact added successfully to Address Book: " + bookName);
-                } else {
-                    System.out.println("Duplicate contact found. Contact not added to Address Book: " + bookName);
-                }
-            }
+            List<Contact> uniqueContacts = newContacts.stream()
+                    .filter(contact -> !existingContacts.contains(contact))
+                    .collect(Collectors.toList());
+
+            existingContacts.addAll(uniqueContacts);
+
+            System.out.println("Contacts added successfully to Address Book: " + bookName);
         } else {
             System.out.println("Address Book not found! Create address book first.");
         }
@@ -168,7 +170,6 @@ public class AddressBook {
         }
     }
 
-
     public Contact findContact(String bookName, String firstName) {
         if (addressBooks.containsKey(bookName)) {
             for (Contact contact : addressBooks.get(bookName)) {
@@ -180,6 +181,28 @@ public class AddressBook {
             System.out.println("Contact not found.");
         }
         return null; // Contact not found
+    }
+
+    public List<Contact> findByCity(String bookName, String city) {
+        if (addressBooks.containsKey(bookName)) {
+            return addressBooks.get(bookName).stream()
+                    .filter(contact -> contact.getCity().equalsIgnoreCase(city))
+                    .collect(Collectors.toList());
+        } else {
+            System.out.println("Contact not found");
+            return List.of();
+        }
+    }
+
+    public List<Contact> findByState(String bookName, String state) {
+        if (addressBooks.containsKey(bookName)) {
+            return addressBooks.get(bookName).stream()
+                    .filter(contact -> contact.getState().equalsIgnoreCase(state))
+                    .collect(Collectors.toList());
+        } else {
+            System.out.println("Contact not found");
+            return List.of();
+        }
     }
 
     public void deleteContact(String bookName, String firstName) {
