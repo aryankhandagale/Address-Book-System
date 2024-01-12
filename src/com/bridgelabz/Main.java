@@ -4,15 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-// This class contains main()
-
 public class Main {
-
-    /*  @Description: This class contains main method for AddressBook Program.
-        @Parameters: String[] args.
-        @Return: void.
-    */
-
 
     public static void main(String[] args) {
         AddressBook addressBookManager = new AddressBook();
@@ -23,6 +15,7 @@ public class Main {
 
         while (true) {
             AddressBook.printMainMenu();
+            System.out.println("Enter your choice: ");
             option = scanner.nextInt();
             scanner.nextLine();
 
@@ -39,7 +32,7 @@ public class Main {
                     currentAddressBook = switchBookName;
                     break;
                 case 3:
-                    ArrayList<Contact> newContacts = AddressBook.takeMultipleUserInput(scanner);
+                    ArrayList<Contact> newContacts = AddressBook.takeUserInput(scanner);
                     addressBookManager.addContacts(currentAddressBook, newContacts);
                     addressBookManager.printContacts(currentAddressBook);
                     break;
@@ -76,7 +69,7 @@ public class Main {
                     String stateToFind = scanner.nextLine();
                     List<Contact> contactsInState = addressBookManager.findByState(currentAddressBook, stateToFind);
                     if (!contactsInState.isEmpty()) {
-                        System.out.println("Contacts found in the city:");
+                        System.out.println("Contacts found in the state:");
                         for (Contact contact : contactsInState) {
                             System.out.println(contact.getFirstName() + " " + contact.getLastName());
                         }
@@ -84,16 +77,22 @@ public class Main {
                         System.out.println("No contacts found in the specified state.");
                     }
                     break;
+                case 9:
+                    System.out.println("Viewing contacts by city directory: ");
+                    addressBookManager.viewFirstNameCityDirectory(currentAddressBook);
+                    break;
+                case 10:
+                    System.out.println("Viewing contacts by state directory: ");
+                    addressBookManager.viewFirstNameStateDirectory(currentAddressBook);
+                    break;
+                case 11:
+                    System.out.println("Exiting the program.");
+                    scanner.close();
+                    System.exit(0);
                 default:
                     System.out.println("Invalid option. Please choose a valid option.");
                     break;
             }
-            System.out.println("Do you want to continue? (yes/no): ");
-            String continueOption = scanner.nextLine();
-            if (!continueOption.equals("yes")) {
-                break;
-            }
         }
-        scanner.close();
     }
 }
