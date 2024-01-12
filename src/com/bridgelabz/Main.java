@@ -86,6 +86,19 @@ public class Main {
                     addressBookManager.viewFirstNameStateDirectory(currentAddressBook);
                     break;
                 case 11:
+                    System.out.println("Enter city to find contacts count: ");
+                    String cityToFindCount = scanner.nextLine();
+                    int countInCity = addressBookManager.getCountByCity(currentAddressBook, cityToFindCount);
+                    System.out.println("Contacts count in the city: " + countInCity);
+                    break;
+
+                case 12:
+                    System.out.println("Enter state to find contacts count: ");
+                    String stateToFindCount = scanner.nextLine();
+                    int countInState = addressBookManager.getCountByState(currentAddressBook, stateToFindCount);
+                    System.out.println("Contacts count in the state: " + countInState);
+                    break;
+                case 13:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);

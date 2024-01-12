@@ -32,7 +32,9 @@ public class AddressBook {
         System.out.println("8. Find Contact by State");
         System.out.println("9. View Contacts by City Directory");
         System.out.println("10. View Contacts by State Directory");
-        System.out.println("11. Exit");
+        System.out.println("11. Find Count by City");
+        System.out.println("12. Find Count by State");
+        System.out.println("13. Exit");
     }
 
     public AddressBook() {
@@ -279,6 +281,17 @@ public class AddressBook {
         }
     }
 
+    public int getCountByCity(String bookName, String city) {
+        if (addressBooks.containsKey(bookName)) {
+            return (int) addressBooks.get(bookName).stream()
+                    .filter(contact -> contact.getCity().equalsIgnoreCase(city))
+                    .count();
+        } else {
+            System.out.println("Address Book not found! Please create the address book first.");
+            return 0;
+        }
+    }
+
     public List<Contact> findByState(String bookName, String state) {
         if (addressBooks.containsKey(bookName)) {
             return addressBooks.get(bookName).stream()
@@ -302,6 +315,17 @@ public class AddressBook {
             });
         } else {
             System.out.println("Directory not found for Address Book: " + bookName);
+        }
+    }
+
+    public int getCountByState(String bookName, String state) {
+        if (addressBooks.containsKey(bookName)) {
+            return (int) addressBooks.get(bookName).stream()
+                    .filter(contact -> contact.getState().equalsIgnoreCase(state))
+                    .count();
+        } else {
+            System.out.println("Address Book not found! Please create the address book first.");
+            return 0;
         }
     }
 }
