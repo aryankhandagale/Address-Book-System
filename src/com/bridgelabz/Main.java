@@ -102,6 +102,13 @@ public class Main {
                     addressBookManager.sortContacts(currentAddressBook, scanner);
                     break;
                 case 14:
+                    addressBookManager.saveToFile(currentAddressBook);
+                    break;
+                case 15:
+                    addressBookManager.loadFromFile(currentAddressBook);
+                    addressBookManager.printContacts(currentAddressBook);
+                    break;
+                case 16:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);

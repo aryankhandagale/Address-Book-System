@@ -3,6 +3,7 @@ package com.bridgelabz;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.Comparator;
+import java.io.*;
 
 import static java.util.Arrays.stream;
 
@@ -36,7 +37,9 @@ public class AddressBook {
         System.out.println("11. Find Count by City");
         System.out.println("12. Find Count by State");
         System.out.println("13. Sort Contacts");
-        System.out.println("14. Exit");
+        System.out.println("14. Save Contacts to File");
+        System.out.println("15. Load Contacts from File");
+        System.out.println("16. Exit");
     }
 
     public AddressBook() {
@@ -372,6 +375,33 @@ public class AddressBook {
             }
         } else {
             System.out.println("Address Book not found! Please create the address book first.");
+        }
+    }
+
+    public void saveToFile(String bookName) {
+        if (addressBooks.containsKey(bookName)) {
+            List<Contact> contacts = addressBooks.get(bookName);
+
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(bookName + ".dat"))) {
+                oos.writeObject(contacts);
+                System.out.println("Contacts saved to file: " + bookName + ".dat");
+            } catch (IOException e) {
+                System.out.println("Error saving contacts to file: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Address Book not found! Please create the address book first.");
+        }
+    }
+
+    public void loadFromFile(String bookName) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bookName + ".dat"))) {
+            List<Contact> contacts = (List<Contact>) ois.readObject();
+            addressBooks.put(bookName, new ArrayList<>(contacts));
+            System.out.println("Contacts loaded from file: " + bookName + ".dat");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + bookName + ".dat");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading contacts from file: " + e.getMessage());
         }
     }
 }
