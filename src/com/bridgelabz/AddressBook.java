@@ -2,6 +2,7 @@ package com.bridgelabz;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import static java.util.Arrays.stream;
 
@@ -245,7 +246,12 @@ public class AddressBook {
     public void printContacts(String bookName) {
         if (addressBooks.containsKey(bookName)) {
             System.out.println("Contacts in Address Book: " + bookName);
-            for (Contact contact : addressBooks.get(bookName)) {
+
+            List<Contact> sortedContacts = addressBooks.get(bookName).stream()
+                    .sorted(Comparator.comparing(Contact::getFirstName))
+                    .collect(Collectors.toList());
+
+            for (Contact contact : sortedContacts) {
                 System.out.println(contact.getFirstName() + " " + contact.getLastName() + ", " +
                         contact.getAddress() + ", " + contact.getCity() + ", " + contact.getState() +
                         ", " + contact.getZipcode() + ", " + contact.getPhone() + ", " + contact.getEmail());
