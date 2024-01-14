@@ -99,6 +99,9 @@ public class Main {
                     System.out.println("Contacts count in the state: " + countInState);
                     break;
                 case 13:
+                    addressBookManager.sortContacts(currentAddressBook, scanner);
+                    break;
+                case 14:
                     System.out.println("Exiting the program.");
                     scanner.close();
                     System.exit(0);

@@ -35,7 +35,8 @@ public class AddressBook {
         System.out.println("10. View Contacts by State Directory");
         System.out.println("11. Find Count by City");
         System.out.println("12. Find Count by State");
-        System.out.println("13. Exit");
+        System.out.println("13. Sort Contacts");
+        System.out.println("14. Exit");
     }
 
     public AddressBook() {
@@ -332,6 +333,45 @@ public class AddressBook {
         } else {
             System.out.println("Address Book not found! Please create the address book first.");
             return 0;
+        }
+    }
+
+    public void sortContacts(String bookName, Scanner scanner) {
+        if (addressBooks.containsKey(bookName)) {
+            System.out.println("Select sorting option:");
+            System.out.println("1. Sort by City");
+            System.out.println("2. Sort by State");
+            System.out.println("3. Sort by Zipcode");
+
+            int sortChoice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            List<Contact> sortedContacts = new ArrayList<>(addressBooks.get(bookName));
+
+            switch (sortChoice) {
+                case 1:
+                    sortedContacts.sort(Comparator.comparing(Contact::getCity));
+                    break;
+                case 2:
+                    sortedContacts.sort(Comparator.comparing(Contact::getState));
+                    break;
+                case 3:
+                    sortedContacts.sort(Comparator.comparing(Contact::getZipcode));
+                    break;
+                default:
+                    System.out.println("Invalid choice. No sorting applied.");
+                    return;
+            }
+
+            System.out.println("Contacts in Address Book: " + bookName + " (Sorted)");
+
+            for (Contact contact : sortedContacts) {
+                System.out.println(contact.getFirstName() + " " + contact.getLastName() + ", " +
+                        contact.getAddress() + ", " + contact.getCity() + ", " + contact.getState() +
+                        ", " + contact.getZipcode() + ", " + contact.getPhone() + ", " + contact.getEmail());
+            }
+        } else {
+            System.out.println("Address Book not found! Please create the address book first.");
         }
     }
 }
